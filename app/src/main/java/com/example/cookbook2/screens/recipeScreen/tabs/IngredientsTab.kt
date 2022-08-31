@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.cookbook2.data.Recipe
+import com.example.cookbook2.domain.Recipe
 import com.example.cookbook2.R
 
 @Composable

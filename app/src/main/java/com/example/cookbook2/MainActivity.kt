@@ -1,25 +1,24 @@
 package com.example.cookbook2
 
-import android.content.res.Resources
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.cookbook2.data.RecipesResource
-import com.example.cookbook2.screens.RecipeScreen
+import com.example.cookbook2.navigation.Navigation
+import com.example.cookbook2.screens.RecipeDetailScreen
+import com.example.cookbook2.screens.listScreen.RecipesListScreen
 import com.example.cookbook2.ui.theme.Cookbook2Theme
 import com.google.accompanist.pager.ExperimentalPagerApi
 
-//import com.google.accompanist.pager.ExperimentalPagerApi
 
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalPagerApi::class)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -28,21 +27,11 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
+
                 ) {
-                    RecipeScreen(recipe = RecipesResource.getById(1)!!)
+                    Navigation()
                 }
             }
         }
-    }
-}
-
-
-//@OptIn(ExperimentalPagerApi::class)
-@OptIn(ExperimentalPagerApi::class)
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    Cookbook2Theme {
-        RecipeScreen(recipe = RecipesResource.getById(1)!!)
     }
 }

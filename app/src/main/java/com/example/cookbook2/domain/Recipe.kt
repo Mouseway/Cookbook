@@ -1,4 +1,4 @@
-package com.example.cookbook2.data
+package com.example.cookbook2.domain
 
 data class Recipe(
     val id: Int,

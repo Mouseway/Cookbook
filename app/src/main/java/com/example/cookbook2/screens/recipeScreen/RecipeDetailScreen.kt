@@ -1,17 +1,16 @@
 package com.example.cookbook2.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.cookbook2.data.Recipe
+import androidx.navigation.NavHostController
+import com.example.cookbook2.domain.Recipe
 import com.example.cookbook2.data.RecipesResource
 import com.example.cookbook2.R
 import com.example.cookbook2.screens.recipeScreen.InfoTab
@@ -25,17 +24,13 @@ import kotlinx.coroutines.launch
 
 @ExperimentalPagerApi
 @Composable
-fun RecipeScreen(recipe: Recipe){
-    val pagerState = rememberPagerState()
+fun RecipeDetailScreen(navController: NavHostController, recipeId: Int?){
 
-//    Box(Modifier.fillMaxSize()) {
-//        Box(Modifier.align(Alignment.BottomCenter)) {
-//            Tabs(pagerState)
-//        }
-//        Box(modifier = Modifier.align(Alignment.TopCenter)) {
-//            TabContent(pagerState, recipe = recipe)
-//        }
-//    }
+    if(recipeId == null)
+        throw IllegalArgumentException("recipe's id is null")
+
+    val pagerState = rememberPagerState()
+    val recipe = RecipesResource.getById(recipeId)!!
     Scaffold(
         bottomBar = {
             Tabs(pagerState)
@@ -70,13 +65,13 @@ fun Tabs(pagerState: PagerState) {
     )
 
     val scope = rememberCoroutineScope()
-    BottomAppBar() {
+//    BottomAppBar(modifier = Modifier.background(MaterialTheme.colorScheme.primary).padding(0.dp)) {
         TabRow(selectedTabIndex = pagerState.currentPage,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxWidth().height(60.dp)
+                .background(MaterialTheme.colorScheme.primary)
         ) {
             tabsList.forEachIndexed { index, pair ->
                 Tab(selected = pagerState.currentPage == index,
-//                    modifier = Modifier.padding(10.dp),
                     icon = {
                         Image(painter = painterResource(id = pair.second), contentDescription = pair.first,
                             Modifier
@@ -87,16 +82,10 @@ fun Tabs(pagerState: PagerState) {
                         scope.launch {
                             pagerState.animateScrollToPage(index)
                         }
-                    }
+                    },
+                    modifier = Modifier.background(MaterialTheme.colorScheme.primary)
                 )
             }
         }
-    }
-}
-
-@ExperimentalPagerApi
-@Preview
-@Composable
-fun RecipeScreenPreview(){
-    RecipeScreen(recipe = RecipesResource.getById(1)!!)
+//    }
 }
