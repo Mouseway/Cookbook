@@ -6,6 +6,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -41,7 +42,11 @@ fun ProcedureTitle(){
 fun Step(index: Int, text: String){
     Row(Modifier.padding(top = 20.dp)){
       StepIndex(index = index)
-      Text(text = text, fontSize = 16.sp, modifier = Modifier.padding(start = 10.dp))
+      Text(
+          text = text,
+          fontSize = 16.sp,
+          color = MaterialTheme.colorScheme.onBackground,
+          modifier = Modifier.padding(start = 10.dp))
     }
 }
 
@@ -52,10 +57,11 @@ fun StepIndex(index: Int){
             .padding(top = 15.dp)
             .size(60.dp)
             .clip(CircleShape)
-            .background(Color.LightGray)){
+            .background(MaterialTheme.colorScheme.secondary)){
         Text(text = index.toString(),
             fontSize = 25.sp,
             fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSecondary,
             modifier = Modifier.align(Alignment.Center))
     }
 }

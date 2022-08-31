@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,21 +29,32 @@ fun IngredientsTab(recipe: Recipe){
             .padding(16.dp)
             .verticalScroll(rememberScrollState())) {
         Column(Modifier.align(Alignment.TopCenter)) {
-            Text(text = "Suroviny", fontSize = 30.sp, fontWeight = FontWeight.Bold)
+
+            Text(text = "Suroviny",
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground)
+
             Divider(Modifier.padding(5.dp))
-            Text(text = buildAnnotatedString {
-                recipe.ingredients.forEach { pair ->
-                    withStyle(style = ParagraphStyle(lineHeight = 25.sp)) {
-                        append( "\u2022")
-                        append("\t\t")
-                        withStyle(SpanStyle(fontWeight = FontWeight.Bold)){
-                            append(pair.second)
+
+            Text(
+                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.padding(top = 10.dp),
+                text = buildAnnotatedString {
+                    recipe.ingredients.forEach { pair ->
+                        withStyle(style = ParagraphStyle(lineHeight = 25.sp)) {
+                            append( "\u2022")
+                            append("\t\t")
+                            withStyle(SpanStyle(fontWeight = FontWeight.Bold)){
+                                append(pair.second)
+                            }
+                            append(" ")
+                            append(pair.first)
                         }
-                        append(" ")
-                        append(pair.first)
                     }
                 }
-            }, fontSize = 16.sp ,modifier = Modifier.padding(top = 10.dp))
+            )
         }
         Box(Modifier.align(Alignment.BottomCenter).padding(start = 20.dp, end = 20.dp)) {
             Image(

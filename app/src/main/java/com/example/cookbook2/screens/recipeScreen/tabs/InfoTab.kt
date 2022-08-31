@@ -6,6 +6,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -32,6 +33,7 @@ fun InfoTab(recipe: Recipe){
         RecipeProperties(recipe.time, recipe.difficulty, recipe.servings)
         Text(text = recipe.description,
             fontSize = 16.sp,
+            color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp))
@@ -44,6 +46,7 @@ fun RecipeTitle(title: String){
     Text(text = title,
         fontSize = 30.sp,
         fontWeight = FontWeight.Bold,
+        color = MaterialTheme.colorScheme.onBackground,
         modifier = Modifier.padding(top = 8.dp)
     )
 }
@@ -63,6 +66,9 @@ fun RecipeProperties(time: Int, difficulty: Double, servings: Int){
 fun RecipeProperty(icon: Int, value: String, description: String){
     Row(){
         Image(painter = painterResource(id = icon), contentDescription = description, Modifier.size(30.dp))
-        Text(text = value, fontSize = 20.sp, modifier = Modifier.padding(start = 8.dp, top = 3.dp))
+        Text(text = value,
+            fontSize = 20.sp,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.padding(start = 8.dp, top = 3.dp))
     }
 }
