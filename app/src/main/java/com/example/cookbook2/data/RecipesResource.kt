@@ -2,6 +2,7 @@ package com.example.cookbook2.data
 
 import com.example.cookbook2.R
 import com.example.cookbook2.domain.Recipe
+import java.util.concurrent.Flow
 
 object RecipesResource {
     private val recipes = listOf<Recipe>(

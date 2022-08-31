@@ -14,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
@@ -23,14 +24,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.cookbook2.domain.Recipe
-import com.example.cookbook2.data.RecipesResource
+import com.example.cookbook2.models.RecipesViewModel
 import com.example.cookbook2.navigation.NavigationScreens
+import org.koin.androidx.compose.viewModel
+import androidx.compose.runtime.getValue
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun RecipesListScreen(navController: NavHostController){
 
-    val recipes = RecipesResource.getAllRecipes()
+    val viewModel by viewModel<RecipesViewModel>()
+
+    val items: List<Recipe>? by viewModel.recipes.observeAsState()
+    val recipes = items ?: listOf<Recipe>()
+
 
     Scaffold(topBar = {
         TopAppBar(backgroundColor = MaterialTheme.colorScheme.primary, modifier = Modifier.shadow(0.dp), elevation = 0.dp) {

@@ -2,17 +2,19 @@ package com.example.cookbook2.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.cookbook2.domain.Recipe
-import com.example.cookbook2.data.RecipesResource
 import com.example.cookbook2.R
+import com.example.cookbook2.models.RecipesViewModel
 import com.example.cookbook2.screens.recipeScreen.InfoTab
 import com.example.cookbook2.screens.recipeScreen.IngredientsTab
 import com.example.cookbook2.screens.recipeScreen.ProcedureTab
@@ -21,6 +23,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.viewModel
 
 @ExperimentalPagerApi
 @Composable
@@ -29,14 +32,22 @@ fun RecipeDetailScreen(navController: NavHostController, recipeId: Int?){
     if(recipeId == null)
         throw IllegalArgumentException("recipe's id is null")
 
+    val modelView by viewModel<RecipesViewModel>()
+    val recipe: Recipe = modelView.getRecipeById(recipeId) ?: throw IllegalArgumentException()
+
     val pagerState = rememberPagerState()
-    val recipe = RecipesResource.getById(recipeId)!!
+
     Scaffold(
+        topBar = {
+             RecipeDetailTopAppBar(){
+                 navController.popBackStack()
+             }
+        },
         bottomBar = {
             Tabs(pagerState)
         }
     ){ innerPadding ->
-        Box(Modifier.padding(innerPadding)){
+        Box(Modifier.padding(innerPadding).background(MaterialTheme.colorScheme.background)){
             TabContent(pagerState, recipe = recipe)
         }
     }
@@ -67,7 +78,9 @@ fun Tabs(pagerState: PagerState) {
     val scope = rememberCoroutineScope()
 //    BottomAppBar(modifier = Modifier.background(MaterialTheme.colorScheme.primary).padding(0.dp)) {
         TabRow(selectedTabIndex = pagerState.currentPage,
-            modifier = Modifier.fillMaxWidth().height(60.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(60.dp)
                 .background(MaterialTheme.colorScheme.primary)
         ) {
             tabsList.forEachIndexed { index, pair ->
@@ -88,4 +101,17 @@ fun Tabs(pagerState: PagerState) {
             }
         }
 //    }
+}
+
+@Composable
+fun RecipeDetailTopAppBar(onBackBtnClick: () -> Unit){
+    TopAppBar(backgroundColor = MaterialTheme.colorScheme.primary) {
+        Image(painter = painterResource(id = R.drawable.arrow_small_left),
+            contentDescription = "Back",
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
+            modifier =  Modifier
+                .padding(5.dp)
+                .clickable { onBackBtnClick() }
+        )
+    }
 }
