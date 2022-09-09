@@ -1,4 +1,4 @@
-package com.example.cookbook2.screens.recipeScreen
+package com.example.cookbook2.screens.recipeDetail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -42,25 +42,28 @@ fun IngredientsTab(recipe: Recipe){
                 color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.padding(top = 10.dp),
                 text = buildAnnotatedString {
-                    recipe.ingredients.forEach { pair ->
+                    recipe.ingredients.forEach { ingredient ->
                         withStyle(style = ParagraphStyle(lineHeight = 25.sp)) {
                             append( "\u2022")
                             append("\t\t")
                             withStyle(SpanStyle(fontWeight = FontWeight.Bold)){
-                                append(pair.second)
+                                append(ingredient.amount)
                             }
                             append(" ")
-                            append(pair.first)
+                            append(ingredient.foodstuff)
                         }
                     }
                 }
             )
         }
-        Box(Modifier.align(Alignment.BottomCenter).padding(start = 20.dp, end = 20.dp)) {
-            Image(
-                painter = painterResource(id = R.drawable.ingredients_list),
-                contentDescription = "Ingredients"
-            )
+
+        if(recipe.ingredients.size < 10){
+            Box(Modifier.align(Alignment.BottomCenter).padding(start = 20.dp, end = 20.dp)) {
+                Image(
+                    painter = painterResource(id = R.drawable.ingredients_list),
+                    contentDescription = "Ingredients"
+                )
+            }
         }
     }
 }

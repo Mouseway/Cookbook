@@ -1,4 +1,4 @@
-package com.example.cookbook2.screens.recipeScreen
+package com.example.cookbook2.screens.recipeDetail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -9,12 +9,19 @@ import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
+//import coil.compose.AsyncImage
 import com.example.cookbook2.R
 import com.example.cookbook2.domain.Recipe
+import com.example.cookbook2.utils.AssetLoader
+import com.google.accompanist.drawablepainter.rememberDrawablePainter
 
 @Composable
 fun InfoTab(recipe: Recipe){
@@ -23,8 +30,7 @@ fun InfoTab(recipe: Recipe){
             .fillMaxSize()
             .padding(16.dp)
             .verticalScroll(rememberScrollState())) {
-        Image(painter =
-        painterResource(id = recipe.imageSrc),
+        Image(painter = rememberDrawablePainter(AssetLoader.loadImage(recipe.imageSrc)),
             contentDescription = recipe.title + " image",
             modifier = Modifier.fillMaxWidth()
         )

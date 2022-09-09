@@ -2,28 +2,30 @@ package com.example.cookbook2.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.cookbook2.domain.Recipe
 import com.example.cookbook2.R
-import com.example.cookbook2.models.RecipesViewModel
-import com.example.cookbook2.screens.recipeScreen.InfoTab
-import com.example.cookbook2.screens.recipeScreen.IngredientsTab
-import com.example.cookbook2.screens.recipeScreen.ProcedureTab
+import com.example.cookbook2.screens.recipeDetail.InfoTab
+import com.example.cookbook2.screens.recipeDetail.IngredientsTab
+import com.example.cookbook2.screens.recipeDetail.ProcedureTab
+import com.example.cookbook2.screens.recipeDetail.RecipeDetailViewModel
+import com.example.cookbook2.utils.FavoriteState
+import com.example.cookbook2.utils.MyAppBar
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.viewModel
+import org.koin.core.parameter.parametersOf
 
 @ExperimentalPagerApi
 @Composable
@@ -32,23 +34,35 @@ fun RecipeDetailScreen(navController: NavHostController, recipeId: Int?){
     if(recipeId == null)
         throw IllegalArgumentException("recipe's id is null")
 
-    val modelView by viewModel<RecipesViewModel>()
-    val recipe: Recipe = modelView.getRecipeById(recipeId) ?: throw IllegalArgumentException()
+    val viewModel by viewModel<RecipeDetailViewModel>{ parametersOf(recipeId)}
+
+    val recipe = viewModel.recipe.observeAsState()
 
     val pagerState = rememberPagerState()
 
     Scaffold(
         topBar = {
-             RecipeDetailTopAppBar(){
-                 navController.popBackStack()
-             }
+             MyAppBar(
+                 backButton = true,
+                 onBackBtnClick = {
+                     navController.popBackStack()
+                 },
+                 favoriteButton = true,
+                 onFavoriteClick = {
+                    viewModel.swapFavorite()
+                 },
+                 favoriteState = recipe.value?.favorite ?: FavoriteState.NOT_FAVORITE
+             )
         },
         bottomBar = {
-            Tabs(pagerState)
+            RecipeDetailTabs(pagerState)
         }
     ){ innerPadding ->
-        Box(Modifier.padding(innerPadding).background(MaterialTheme.colorScheme.background)){
-            TabContent(pagerState, recipe = recipe)
+        Box(
+            Modifier
+                .padding(innerPadding)
+                .background(MaterialTheme.colorScheme.background)){
+            recipe.value?.let { TabContent(pagerState, recipe = it) }
         }
     }
 }
@@ -67,7 +81,7 @@ fun TabContent(pagerState: PagerState, recipe: Recipe) {
 
 @ExperimentalPagerApi
 @Composable
-fun Tabs(pagerState: PagerState) {
+fun RecipeDetailTabs(pagerState: PagerState) {
 
     val tabsList: List<Pair<String, Int>> = listOf(
         "Info" to R.drawable.info,
@@ -76,7 +90,6 @@ fun Tabs(pagerState: PagerState) {
     )
 
     val scope = rememberCoroutineScope()
-//    BottomAppBar(modifier = Modifier.background(MaterialTheme.colorScheme.primary).padding(0.dp)) {
         TabRow(selectedTabIndex = pagerState.currentPage,
             modifier = Modifier
                 .fillMaxWidth()
@@ -99,19 +112,5 @@ fun Tabs(pagerState: PagerState) {
                     modifier = Modifier.background(MaterialTheme.colorScheme.primary)
                 )
             }
-        }
-//    }
-}
-
-@Composable
-fun RecipeDetailTopAppBar(onBackBtnClick: () -> Unit){
-    TopAppBar(backgroundColor = MaterialTheme.colorScheme.primary) {
-        Image(painter = painterResource(id = R.drawable.arrow_small_left),
-            contentDescription = "Back",
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
-            modifier =  Modifier
-                .padding(5.dp)
-                .clickable { onBackBtnClick() }
-        )
     }
 }
