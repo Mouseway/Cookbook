@@ -94,7 +94,7 @@ class RecipesRepository(private val dao: RecipeDao) {
         }
     }
 
-    suspend fun getRecipeById(id: Int): LiveData<Recipe> {
+    fun getRecipeById(id: Int): LiveData<Recipe> {
         val roomRecipeLiveData = dao.getRecipeById(id)
         return Transformations.map(roomRecipeLiveData
         ) { roomRecipe ->
@@ -105,5 +105,29 @@ class RecipesRepository(private val dao: RecipeDao) {
     suspend fun updateRecipeInfo(recipe: Recipe){
         val recipeInfo = recipeToRecipeInfo(recipe)
         dao.update(recipeInfo)
+    }
+
+    fun getAllFavorite(): Flow<List<Recipe>> {
+        return dao.getAllFavorite().map { list ->
+            list.map { roomRecipe ->
+                roomRecipeToRecipe(roomRecipe)
+            }
+        }
+    }
+
+    fun getLessThanMin(time: Int): Flow<List<Recipe>> {
+        return dao.getLessThanMin(time).map { list ->
+            list.map { roomRecipe ->
+                roomRecipeToRecipe(roomRecipe)
+            }
+        }
+    }
+
+    fun getAllWithoutCategory(): Flow<List<Recipe>> {
+        return dao.getAllWithoutCategory().map { list ->
+            list.map { roomRecipe ->
+                roomRecipeToRecipe(roomRecipe)
+            }
+        }
     }
 }

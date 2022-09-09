@@ -1,10 +1,7 @@
 package com.example.cookbook2.data.room.daos
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.example.cookbook2.data.room.entities.CategoryRecipeCrossRef
 import com.example.cookbook2.data.room.entities.IngredientItemEntity
 import com.example.cookbook2.data.room.entities.RecipeInfoEntity
@@ -40,4 +37,20 @@ interface RecipeDao {
 
     @Insert
     suspend fun addCategoryToRecipe(ref: CategoryRecipeCrossRef)
+
+    @Transaction
+    @Query("SELECT * FROM recipe WHERE favorite = 1")
+    fun getAllFavorite(): Flow<List<RecipeRoom>>
+
+    @Transaction
+    @Query("SELECT * FROM recipe WHERE time <= :time")
+    fun getLessThanMin(time: Int): Flow<List<RecipeRoom>>
+
+
+    @Transaction
+    @Query("SELECT * " +
+            "FROM recipe r " +
+            "LEFT JOIN categoryrecipecrossref c ON r.id = c.recipeId " +
+            "WHERE c.categoryId IS NULL")
+    fun getAllWithoutCategory(): Flow<List<RecipeRoom>>
 }

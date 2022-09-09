@@ -38,15 +38,17 @@ fun CategoriesScreen(navController: NavHostController){
 
     val modelView by viewModel<CategoriesViewModel>()
     val items: List<Category>? by modelView.categories.observeAsState()
-    val categories: List<Category> = listOf(Category.all) + (items ?: listOf())
+    val categories: List<Category> = listOf(Category.all, Category.favorite, Category.fast) + (items ?: listOf()) + listOf(Category.others)
 
     Scaffold(
         topBar = { MyAppBar(title = "Kategorie") }
     ) { padding ->
-        LazyVerticalGrid(GridCells.Fixed(3), contentPadding = padding) {
-            items(categories.size){ index ->
-                CategoryView(category = categories[index]){
-                    navController.navigate(NavigationScreens.RecipesListScreen.route + "/${categories[index].id}")
+        Box(Modifier.padding(padding)){
+            LazyVerticalGrid(GridCells.Fixed(2), contentPadding = PaddingValues(bottom = 15.dp)) {
+                items(categories.size){ index ->
+                    CategoryView(category = categories[index]){
+                        navController.navigate(NavigationScreens.RecipesListScreen.route + "/${categories[index].id}")
+                    }
                 }
             }
         }
@@ -84,7 +86,7 @@ fun CategoryView(category: Category, onClick: () -> Unit){
                 text = category.title,
                 color = MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier
-                    .padding(10.dp)
+                    .padding(bottom = 10.dp)
                     .align(Alignment.TopCenter),
                 textAlign = TextAlign.Center
             )

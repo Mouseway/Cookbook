@@ -79,9 +79,10 @@ fun RecipesListScreen(navController: NavHostController, categoryId: Int){
             }
         }
     }) { padding ->
-        LazyVerticalGrid(GridCells.Fixed(2), contentPadding = padding){
+
+        LazyColumn(contentPadding = padding){
             items(recipes.size){
-                index ->
+                    index ->
                 RecipePreview(recipe = recipes[index]){
                     navController.navigate(NavigationScreens.RecipeDetailScreen.route + "/${recipes[index].id}")
                 }
@@ -109,14 +110,14 @@ fun RecipePreview(recipe: Recipe, onClick: (Int) -> Unit){
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(110.dp)
+                .height(180.dp)
         )
         Text(
             text = recipe.title,
             color = MaterialTheme.colorScheme.onPrimaryContainer,
             fontSize = 15.sp,
             modifier = Modifier
-                .padding(5.dp)
+                .padding(start = 20.dp, top = 5.dp, bottom = 5.dp, end = 5.dp)
         )
     }
 }

@@ -44,11 +44,17 @@ class RecipesViewModel(private val categoryId: Int, val recipesRepository: Recip
 
             category.value = when(categoryId){
                 Category.all.id -> Category.all
+                Category.favorite.id -> Category.favorite
+                Category.fast.id -> Category.fast
+                Category.others.id -> Category.others
                 else -> categoriesRepository.getCategoryById(categoryId)
             }
 
             val recipesFlow = when(categoryId){
                 Category.all.id -> recipesRepository.getAllRecipes()
+                Category.favorite.id -> recipesRepository.getAllFavorite()
+                Category.fast.id -> recipesRepository.getLessThanMin(Category.FAST_RECIPE_MAX_TIME)
+                Category.others.id -> recipesRepository.getAllWithoutCategory()
                 else -> recipesRepository.getByCategory(categoryId)
             }
 

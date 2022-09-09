@@ -11,6 +11,8 @@ class Category(
 
         private const val defaultImagePath = "categories/cookbook.png"
 
+        const val FAST_RECIPE_MAX_TIME = 30
+
         val all = Category(
             id = -1,
             imageSrc = defaultImagePath,
@@ -21,6 +23,23 @@ class Category(
             id = -2,
             imageSrc = defaultImagePath,
             title = ""
+        )
+
+        val favorite = Category(
+            id = -3,
+            imageSrc = "categories/favorite.png",
+            title = "Oblíbené"
+        )
+
+        val fast = Category(
+            id = -4,
+            imageSrc = "categories/stopwatch.png",
+            title = "Rychlé recepty"
+        )
+        val others = Category(
+            id = -5,
+            imageSrc = "categories/others.png",
+            title = "Ostatní"
         )
     }
 }
