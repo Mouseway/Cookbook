@@ -1,6 +1,6 @@
 package com.example.cookbook2.screens.categories
 
-import androidx.compose.foundation.Image
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -20,11 +20,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.example.cookbook2.domain.Category
 import com.example.cookbook2.navigation.NavigationScreens
-import com.example.cookbook2.utils.AssetLoader
+import com.example.cookbook2.utils.ASSETS_IMAGES_PATH
 import com.example.cookbook2.utils.MyAppBar
-import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import org.koin.androidx.compose.viewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,15 +66,14 @@ fun CategoryView(category: Category, onClick: () -> Unit){
         Box(modifier = Modifier
             .padding(10.dp)
             .fillMaxWidth()){
-            Image(
-                painter = rememberDrawablePainter(drawable = AssetLoader.loadImage(category.imageSrc)),
+            AsyncImage(
+                model = Uri.parse(ASSETS_IMAGES_PATH + category.imageSrc),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth(0.7F)
                     .wrapContentHeight()
                     .align(Alignment.TopCenter)
             )
-
         }
         // Category title
         Box(modifier = Modifier

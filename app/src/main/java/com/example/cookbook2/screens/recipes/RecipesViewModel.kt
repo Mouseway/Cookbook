@@ -39,20 +39,24 @@ class RecipesViewModel(private val categoryId: Int, val recipesRepository: Recip
             // Getting flow with all recipes in selected category
             recipesRepository.getByCategory(categoryId).collect{
                 _recipes.value = it
-                filteredRecipes.value = it
+                filterRecipes()
             }
+
         }
     }
 
     fun onSearchedTextChange(newText: String){
         _searchedText.value = newText
-        if(newText == ""){
-            // Reset filter
+        filterRecipes()
+    }
+
+    private fun filterRecipes(){
+        val text = _searchedText.value
+        if(text == ""){
             filteredRecipes.value = _recipes.value
         }else{
-            // Filter recipes by new text
             filteredRecipes.value = _recipes.value?.filter { recipe ->
-                recipe.titleContains(newText)
+                recipe.titleContains(text)
             }
         }
     }

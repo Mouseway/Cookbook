@@ -1,7 +1,7 @@
 package com.example.cookbook2.screens.recipes
 
+import android.net.Uri
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -25,12 +25,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.example.cookbook2.domain.Recipe
 import com.example.cookbook2.navigation.NavigationScreens
-import com.example.cookbook2.utils.AssetLoader
+import com.example.cookbook2.utils.ASSETS_IMAGES_PATH
 import com.example.cookbook2.utils.MyAppBar
 import com.example.cookbook2.utils.SearchingTopBar
-import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import org.koin.androidx.compose.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -131,12 +131,12 @@ fun RecipePreview(recipe: Recipe, onClick: (Int) -> Unit, onFavoriteClick: () ->
                 .height(180.dp)
                 .fillMaxWidth()){
             // Recipe image
-            Image(
-                painter = rememberDrawablePainter(drawable = AssetLoader.loadImage(recipe.imageSrc)),
-                contentDescription = null,
+
+            AsyncImage(
+                model = Uri.parse( ASSETS_IMAGES_PATH + recipe.imageSrc),
+                contentDescription = recipe.title + " image",
                 contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxSize()
+                modifier = Modifier.fillMaxSize()
             )
             // Heart button
             IconButton(onClick = { onFavoriteClick() },
