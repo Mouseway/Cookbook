@@ -1,6 +1,5 @@
 package com.example.cookbook2.screens.categories
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,21 +17,17 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.cookbook2.R
 import com.example.cookbook2.domain.Category
 import com.example.cookbook2.navigation.NavigationScreens
-import com.example.cookbook2.screens.recipeDetail.RecipeDetailViewModel
 import com.example.cookbook2.utils.AssetLoader
 import com.example.cookbook2.utils.MyAppBar
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import org.koin.androidx.compose.viewModel
-import org.koin.core.parameter.parametersOf
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoriesScreen(navController: NavHostController){
 
@@ -43,6 +38,7 @@ fun CategoriesScreen(navController: NavHostController){
     Scaffold(
         topBar = { MyAppBar(title = "Kategorie") }
     ) { padding ->
+        // List of categories
         Box(Modifier.padding(padding)){
             LazyVerticalGrid(GridCells.Fixed(2), contentPadding = PaddingValues(bottom = 15.dp)) {
                 items(categories.size){ index ->
@@ -61,12 +57,12 @@ fun CategoryView(category: Category, onClick: () -> Unit){
     Column(
         modifier = Modifier
             .padding(top = 20.dp, start = 10.dp, end = 10.dp)
-//            .fillMaxWidth()
             .clip(RoundedCornerShape(10.dp))
             .background(MaterialTheme.colorScheme.secondary)
             .clickable { onClick() }
 
     ){
+        // Category image
         Box(modifier = Modifier
             .padding(10.dp)
             .fillMaxWidth()){
@@ -80,6 +76,7 @@ fun CategoryView(category: Category, onClick: () -> Unit){
             )
 
         }
+        // Category title
         Box(modifier = Modifier
             .fillMaxWidth()){
             Text(

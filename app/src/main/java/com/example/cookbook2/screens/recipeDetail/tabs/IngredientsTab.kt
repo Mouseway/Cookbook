@@ -29,14 +29,14 @@ fun IngredientsTab(recipe: Recipe){
             .padding(16.dp)
             .verticalScroll(rememberScrollState())) {
         Column(Modifier.align(Alignment.TopCenter)) {
-
+            // Title
             Text(text = "Suroviny",
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground)
 
             Divider(Modifier.padding(5.dp))
-
+            // List of ingredients
             Text(
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.onBackground,
@@ -44,6 +44,7 @@ fun IngredientsTab(recipe: Recipe){
                 text = buildAnnotatedString {
                     recipe.ingredients.forEach { ingredient ->
                         withStyle(style = ParagraphStyle(lineHeight = 25.sp)) {
+                            // bullet list
                             append( "\u2022")
                             append("\t\t")
                             withStyle(SpanStyle(fontWeight = FontWeight.Bold)){
@@ -56,7 +57,7 @@ fun IngredientsTab(recipe: Recipe){
                 }
             )
         }
-
+        // Shows image but only if there the few ingredients
         if(recipe.ingredients.size < 10){
             Box(Modifier.align(Alignment.BottomCenter).padding(start = 20.dp, end = 20.dp)) {
                 Image(

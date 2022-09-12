@@ -1,7 +1,6 @@
 package com.example.cookbook2.utils
 
 import android.graphics.drawable.Drawable
-import android.util.Log
 import androidx.appcompat.content.res.AppCompatResources
 import com.example.cookbook2.App
 import com.example.cookbook2.R
@@ -12,6 +11,10 @@ object AssetLoader {
 
     private val loadedImages: MutableMap<String, Drawable> = mutableMapOf()
 
+
+    // Loads images from asset folder by path
+    // Images are stored in map to prevent reloading the image more times
+    // Capacity of stored images is 100, after reaching the maximum is the map cleared
     fun loadImage(path: String): Drawable? {
         return try {
 
@@ -20,14 +23,14 @@ object AssetLoader {
 
             val ims: InputStream = App.appContext.assets.open("images/$path")
             val d = Drawable.createFromStream(ims, null) ?: throw IOException()
-            loadedImages[path] = d
 
             if(loadedImages.size > 100)
                 loadedImages.clear()
 
+            loadedImages[path] = d
             return d
         } catch (ex: IOException) {
-            AppCompatResources.getDrawable(App.appContext, R.drawable.default_recipe_image);
+            AppCompatResources.getDrawable(App.appContext, R.drawable.default_recipe_image)
         }
     }
 }

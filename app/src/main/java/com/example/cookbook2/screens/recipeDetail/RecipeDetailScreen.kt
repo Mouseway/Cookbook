@@ -32,7 +32,7 @@ import org.koin.core.parameter.parametersOf
 fun RecipeDetailScreen(navController: NavHostController, recipeId: Int?){
 
     if(recipeId == null)
-        throw IllegalArgumentException("recipe's id is null")
+        throw IllegalArgumentException("recipe id is null")
 
     val viewModel by viewModel<RecipeDetailViewModel>{ parametersOf(recipeId)}
 
@@ -42,6 +42,7 @@ fun RecipeDetailScreen(navController: NavHostController, recipeId: Int?){
 
     Scaffold(
         topBar = {
+            // TopBar with back button and favorite button
              MyAppBar(
                  backButton = true,
                  onBackBtnClick = {
@@ -58,6 +59,7 @@ fun RecipeDetailScreen(navController: NavHostController, recipeId: Int?){
             RecipeDetailTabs(pagerState)
         }
     ){ innerPadding ->
+        // Tab content - InfoTab, IngredientsTab or ProcedureTab
         Box(
             Modifier
                 .padding(innerPadding)
@@ -79,6 +81,7 @@ fun TabContent(pagerState: PagerState, recipe: Recipe) {
     }
 }
 
+// Bottom bar with buttons for change displayed recipe information ( Basic info, Ingredients, Steps)
 @ExperimentalPagerApi
 @Composable
 fun RecipeDetailTabs(pagerState: PagerState) {

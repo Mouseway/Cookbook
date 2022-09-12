@@ -6,7 +6,8 @@ import com.example.cookbook2.data.room.daos.RecipeDao
 import com.example.cookbook2.data.room.entities.CategoryRecipeCrossRef
 import com.example.cookbook2.data.room.entities.IngredientItemEntity
 import com.example.cookbook2.data.room.entities.RecipeInfoEntity
-import com.example.cookbook2.data.room.entities.RecipeRoom
+import com.example.cookbook2.data.room.entities.RecipeEntity
+import com.example.cookbook2.domain.Category
 import com.example.cookbook2.domain.IngredientItem
 import com.example.cookbook2.domain.Recipe
 import com.example.cookbook2.utils.FavoriteState
@@ -18,9 +19,15 @@ class RecipesRepository(private val dao: RecipeDao) {
     private val stepsSeparator = "\n"
 
     fun getByCategory(categoryId: Int): Flow<List<Recipe>>{
-        return dao.getByCategoryId(categoryId).map { list ->
-            list.map { roomRecipe ->
-                roomRecipeToRecipe(roomRecipe)
+        return when(categoryId){
+            Category.all.id -> getAllRecipes()
+            Category.favorite.id -> getAllFavorite()
+            Category.fast.id -> getLessThanMin(Category.FAST_RECIPE_MAX_TIME)
+            Category.others.id -> getAllWithoutCategory()
+            else -> dao.getByCategoryId(categoryId).map { list ->
+                list.map { roomRecipe ->
+                    recipeEntityToRecipe(roomRecipe)
+                }
             }
         }
     }
@@ -62,18 +69,18 @@ class RecipesRepository(private val dao: RecipeDao) {
         )
     }
 
-    private fun roomRecipeToRecipe(roomRecipe: RecipeRoom): Recipe {
+    private fun recipeEntityToRecipe(recipeEntity: RecipeEntity): Recipe {
         return Recipe(
-            id = roomRecipe.recipe.id,
-            title = roomRecipe.recipe.title,
-            description = roomRecipe.recipe.description,
-            servings = roomRecipe.recipe.servings,
-            time = roomRecipe.recipe.time,
-            imageSrc = roomRecipe.recipe.imageSrc,
-            difficulty = roomRecipe.recipe.difficulty,
-            steps = parseSteps(roomRecipe.recipe.steps),
-            ingredients = roomRecipe.ingredients.map { IngredientItem(it.id, it.amount, it.foodstuff) },
-            favorite = if(roomRecipe.recipe.favorite) FavoriteState.FAVORITE else FavoriteState.NOT_FAVORITE
+            id = recipeEntity.recipe.id,
+            title = recipeEntity.recipe.title,
+            description = recipeEntity.recipe.description,
+            servings = recipeEntity.recipe.servings,
+            time = recipeEntity.recipe.time,
+            imageSrc = recipeEntity.recipe.imageSrc,
+            difficulty = recipeEntity.recipe.difficulty,
+            steps = parseSteps(recipeEntity.recipe.steps),
+            ingredients = recipeEntity.ingredients.map { IngredientItem(it.id, it.amount, it.foodstuff) },
+            favorite = if(recipeEntity.recipe.favorite) FavoriteState.FAVORITE else FavoriteState.NOT_FAVORITE
         )
     }
 
@@ -89,16 +96,16 @@ class RecipesRepository(private val dao: RecipeDao) {
     fun getAllRecipes(): Flow<List<Recipe>> {
         return dao.getAllRecipes().map { list ->
             list.map { roomRecipe ->
-                roomRecipeToRecipe(roomRecipe)
+                recipeEntityToRecipe(roomRecipe)
             }
         }
     }
 
     fun getRecipeById(id: Int): LiveData<Recipe> {
-        val roomRecipeLiveData = dao.getRecipeById(id)
-        return Transformations.map(roomRecipeLiveData
-        ) { roomRecipe ->
-            roomRecipeToRecipe(roomRecipe)
+        val recipeEntityLiveData = dao.getRecipeById(id)
+        return Transformations.map(recipeEntityLiveData
+        ) { recipeEntity ->
+            recipeEntityToRecipe(recipeEntity)
         }
     }
 
@@ -109,24 +116,24 @@ class RecipesRepository(private val dao: RecipeDao) {
 
     fun getAllFavorite(): Flow<List<Recipe>> {
         return dao.getAllFavorite().map { list ->
-            list.map { roomRecipe ->
-                roomRecipeToRecipe(roomRecipe)
+            list.map { recipeEntity ->
+                recipeEntityToRecipe(recipeEntity)
             }
         }
     }
 
     fun getLessThanMin(time: Int): Flow<List<Recipe>> {
-        return dao.getLessThanMin(time).map { list ->
-            list.map { roomRecipe ->
-                roomRecipeToRecipe(roomRecipe)
+        return dao.getLessThanMinutes(time).map { list ->
+            list.map { recipeEntity ->
+                recipeEntityToRecipe(recipeEntity)
             }
         }
     }
 
     fun getAllWithoutCategory(): Flow<List<Recipe>> {
         return dao.getAllWithoutCategory().map { list ->
-            list.map { roomRecipe ->
-                roomRecipeToRecipe(roomRecipe)
+            list.map { recipeEntity ->
+                recipeEntityToRecipe(recipeEntity)
             }
         }
     }

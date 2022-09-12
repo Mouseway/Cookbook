@@ -30,6 +30,7 @@ fun InfoTab(recipe: Recipe){
             .fillMaxSize()
             .padding(16.dp)
             .verticalScroll(rememberScrollState())) {
+        // Image of dish
         Image(painter = rememberDrawablePainter(AssetLoader.loadImage(recipe.imageSrc)),
             contentDescription = recipe.title + " image",
             modifier = Modifier.fillMaxWidth()
@@ -37,6 +38,7 @@ fun InfoTab(recipe: Recipe){
         RecipeTitle(title = recipe.title)
         Divider(Modifier.padding(5.dp))
         RecipeProperties(recipe.time, recipe.difficulty, recipe.servings)
+        // Recipe description
         Text(text = recipe.description,
             fontSize = 16.sp,
             color = MaterialTheme.colorScheme.onBackground,

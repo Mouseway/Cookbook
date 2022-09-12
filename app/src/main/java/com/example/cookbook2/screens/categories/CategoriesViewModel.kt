@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cookbook2.data.repositories.CategoriesRepository
 import com.example.cookbook2.domain.Category
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class CategoriesViewModel(categoriesRepository: CategoriesRepository) : ViewModel() {

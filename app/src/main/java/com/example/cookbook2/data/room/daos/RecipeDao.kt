@@ -5,8 +5,7 @@ import androidx.room.*
 import com.example.cookbook2.data.room.entities.CategoryRecipeCrossRef
 import com.example.cookbook2.data.room.entities.IngredientItemEntity
 import com.example.cookbook2.data.room.entities.RecipeInfoEntity
-import com.example.cookbook2.data.room.entities.RecipeRoom
-import com.example.cookbook2.domain.Recipe
+import com.example.cookbook2.data.room.entities.RecipeEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -24,27 +23,27 @@ interface RecipeDao {
     suspend fun update(recipeIngredientItemEntity: IngredientItemEntity)
 
     @Query("SELECT * FROM recipe")
-    fun getAllRecipes(): Flow<List<RecipeRoom>>
+    fun getAllRecipes(): Flow<List<RecipeEntity>>
 
     @Query("SELECT * FROM recipe WHERE id=:id")
-    fun getRecipeById(id: Int): LiveData<RecipeRoom>
+    fun getRecipeById(id: Int): LiveData<RecipeEntity>
 
     @Query("SELECT * FROM recipe"
     + " INNER JOIN categoryrecipecrossref ON recipeId == id"
     + " WHERE categoryId == :categoryId"
     )
-    fun getByCategoryId(categoryId: Int): Flow<List<RecipeRoom>>
+    fun getByCategoryId(categoryId: Int): Flow<List<RecipeEntity>>
 
     @Insert
     suspend fun addCategoryToRecipe(ref: CategoryRecipeCrossRef)
 
     @Transaction
     @Query("SELECT * FROM recipe WHERE favorite = 1")
-    fun getAllFavorite(): Flow<List<RecipeRoom>>
+    fun getAllFavorite(): Flow<List<RecipeEntity>>
 
     @Transaction
     @Query("SELECT * FROM recipe WHERE time <= :time")
-    fun getLessThanMin(time: Int): Flow<List<RecipeRoom>>
+    fun getLessThanMinutes(time: Int): Flow<List<RecipeEntity>>
 
 
     @Transaction
@@ -52,5 +51,5 @@ interface RecipeDao {
             "FROM recipe r " +
             "LEFT JOIN categoryrecipecrossref c ON r.id = c.recipeId " +
             "WHERE c.categoryId IS NULL")
-    fun getAllWithoutCategory(): Flow<List<RecipeRoom>>
+    fun getAllWithoutCategory(): Flow<List<RecipeEntity>>
 }

@@ -37,7 +37,13 @@ class CategoriesRepository(private val dao: CategoryDao) {
     }
 
     suspend fun getCategoryById(categoryId: Int): Category {
-        return entityToCategory(dao.getCategoryById(categoryId))
+        return when(categoryId){
+            Category.all.id -> Category.all
+            Category.favorite.id -> Category.favorite
+            Category.fast.id -> Category.fast
+            Category.others.id -> Category.others
+            else -> entityToCategory(dao.getCategoryById(categoryId))
+        }
     }
 }
 

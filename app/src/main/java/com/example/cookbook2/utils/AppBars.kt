@@ -1,15 +1,22 @@
 package com.example.cookbook2.utils
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -17,6 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cookbook2.R
 
+
+// Bar can contain title, back button, search button and favorite button
 @Composable
 fun MyAppBar(title: String = "",
              backButton: Boolean = false,
@@ -112,29 +121,42 @@ fun SearchButton(onClick: () -> Unit){
 }
 
 @Composable
-fun SearchingTopBar(text: String, onTextChange: (String) -> Unit, onCloseClick: () -> Unit, ){
+fun SearchingTopBar(text: String, onTextChange: (String) -> Unit, onCloseClick: () -> Unit, onSearchClick: () -> Unit, focusRequested: Boolean){
+
+    val focusRequester = remember { FocusRequester() }
+    val requestField = remember {
+        mutableStateOf(focusRequested)
+    }
+
     TopAppBar(backgroundColor = MaterialTheme.colorScheme.primary) {
         Box(
             Modifier.fillMaxSize()
         ){
             TextField(
                 modifier = Modifier
-                   .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester),
                 value = text,
+                textStyle = TextStyle(
+                    fontSize = 17.sp
+                ),
                 onValueChange = {txt -> onTextChange(txt)},
                 singleLine = true,
                 placeholder = {Text(
-                   text = "Palačinka...",
-                   color = MaterialTheme.colorScheme.onPrimary.copy(alpha = ContentAlpha.medium)
+                    text = "Palačinka...",
+                    color = MaterialTheme.colorScheme.onPrimary.copy(alpha = ContentAlpha.medium),
+                    fontSize = 17.sp
                 )},
                 leadingIcon = {
-                   Icon(
-                        painter = painterResource(id = R.drawable.search),
-                        contentDescription = "Search",
-                        tint = MaterialTheme.colorScheme.onPrimary.copy(alpha = ContentAlpha.medium ),
-                        modifier = Modifier
-                            .padding(15.dp)
-                   )
+                    IconButton(onClick = onSearchClick) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.search),
+                            contentDescription = "Search",
+                            tint = MaterialTheme.colorScheme.onPrimary.copy(alpha = ContentAlpha.medium ),
+                            modifier = Modifier
+                                .padding(15.dp)
+                        )
+                    }
                  },
                 keyboardOptions = KeyboardOptions(
                    imeAction = ImeAction.Search
@@ -162,8 +184,17 @@ fun SearchingTopBar(text: String, onTextChange: (String) -> Unit, onCloseClick: 
                         )
                     }
                 },
-
+                keyboardActions = KeyboardActions(
+                    onSearch = {onSearchClick()},
+                    onDone = {onSearchClick()}
+                )
            )
         }
+    }
+    if(requestField.value){
+        LaunchedEffect(Unit) {
+            focusRequester.requestFocus()
+        }
+        requestField.value = false
     }
 }

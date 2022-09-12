@@ -22,4 +22,12 @@ data class Recipe(
        return title.lowercase().unaccent().contains(text.lowercase().unaccent())
     }
 
+    fun swappedFavorite(): Recipe {
+        return copy(
+            favorite = when(favorite){
+                FavoriteState.FAVORITE -> FavoriteState.NOT_FAVORITE
+                else -> FavoriteState.FAVORITE
+            }
+        )
+    }
 }

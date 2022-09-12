@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class RecipeDetailViewModel(private val recipeId: Int, private val recipesRepository: RecipesRepository) : ViewModel() {
 
-    lateinit private var _recipe: LiveData<Recipe>
+    private lateinit var _recipe: LiveData<Recipe>
     val recipe: LiveData<Recipe>
         get() = _recipe
 
@@ -23,17 +23,9 @@ class RecipeDetailViewModel(private val recipeId: Int, private val recipesReposi
     }
 
     fun swapFavorite(){
-        val newState = if(recipe.value?.favorite == FavoriteState.FAVORITE){
-             FavoriteState.NOT_FAVORITE
-        }else{
-            FavoriteState.FAVORITE
-        }
-
-        val copy = recipe.value?.copy(favorite = newState) ?: throw NullPointerException("Null can't be so much popular!")
-
+        val swapped = recipe.value?.swappedFavorite() ?: throw NullPointerException("Null can't be so much popular!")
         viewModelScope.launch{
-            recipesRepository.updateRecipeInfo(recipe = copy)
+            recipesRepository.updateRecipeInfo(recipe = swapped)
         }
-
     }
 }

@@ -1,5 +1,7 @@
 package com.example.cookbook2.utils
 
-enum class FavoriteState{
-    FAVORITE, NOT_FAVORITE
+import com.example.cookbook2.R
+
+enum class FavoriteState(val icon: Int){
+    FAVORITE(R.drawable.heart_filled), NOT_FAVORITE(R.drawable.heart)
 }
