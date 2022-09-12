@@ -2,7 +2,7 @@
 The project's goal was to create Cookbook app in Android for personal usage. 
 
 ## Features
-- User can filter recipes by categories (type of food, time required for cooking, favorites) and search for recipe by recipe name
+- User can filter recipes by categories (type of food, time required for cooking, favorites) and search recipe name
 - Recipes can be marked as favorite and after that user can find it in category Favorite
 - Preview of recipe contains:
   - short description with recipe properties (required time, diffficulty, count of servings)
