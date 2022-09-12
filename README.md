@@ -2,12 +2,21 @@
 The project's goal was to create Cookbook app in Android for personal usage. 
 
 ## Features
+- Preview of recipe:
+  - short description with required time, diffficulty and count of servings
+  - ingredients
+  - cooking process
+- Marking recipes as favourite
+- Filtering by categories (types of meal, time required, favorites)
+- Search by name
+<!-- 
+## Features
 - User can filter recipes by categories (type of food, time required for cooking, favorites) and search recipe name
 - Recipes can be marked as favorite and after that user can find it in category Favorite
 - Preview of recipe contains:
   - short description with recipe properties (required time, diffficulty, count of servings)
   - needed ingredients
-  - cooking process
+  - cooking process -->
 
 <div>
   <img src="https://user-images.githubusercontent.com/45421463/189637974-4b2a1087-4cdf-42d7-833a-1dbdd04e2bac.png" width="195" />
@@ -27,6 +36,11 @@ The project's goal was to create Cookbook app in Android for personal usage.
 
 
 ## Planned features
+- removing recipes
+- desktop/web client for writing and syncing recipes
+
+<!-- ## Planned features
 - button for removing recipes
 - desktop/web client for generating qr code with recipe data
 - scanning qr code for adding recipe to app
+ -->
