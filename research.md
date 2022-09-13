@@ -2,11 +2,11 @@
 
 ## QR codes
 ### Generators
-#### client
-#### android
+#### client - http://davidshimjs.github.io/qrcodejs/
+#### android - https://github.com/androidmads/QRGenerator
 ### Scanners
 #### client
-#### android
+#### android - https://github.com/yuriy-budiyev/code-scanner
 
 ## URL encoded files
 
